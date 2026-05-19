@@ -22,7 +22,7 @@ Implement a single-page cat clicker browser game using vanilla HTML, CSS, and Ty
     - _Requirements: 3.7, 4.2, 6.1_
 
 - [ ] 2. GameEngine — core state and actions
-  - [-] 2.1 Implement `GameEngine` class with `GameState` initialization and `click()` action
+  - [x] 2.1 Implement `GameEngine` class with `GameState` initialization and `click()` action
     - Create `src/GameEngine.ts` with `GameState` as private field
     - Implement `initState()` returning default `GameState` (purrs: 0, currentPurrs: 0, clickValue: 1, etc.)
     - Implement `click()`: increment `currentPurrs` and `purrs` by `clickValue`, emit `stateChange`
@@ -30,27 +30,27 @@ Implement a single-page cat clicker browser game using vanilla HTML, CSS, and Ty
     - Implement `getClickValue()` computed getter
     - _Requirements: 1.2, 1.5_
 
-  - [~] 2.2 Write property test for `click()` — Property 1
+  - [x] 2.2 Write property test for `click()` — Property 1
     - **Property 1: Click increments Purrs by exactly the click value**
     - **Validates: Requirements 1.2**
     - File: `src/__tests__/property/GameEngine.property.test.ts`
     - Use `arbClickValue` and `arbPurrs` arbitraries from design
 
-  - [~] 2.3 Implement `purchaseUpgrade()`, `getNextUpgradeCost()`, and `getPurrsPerSecond()`
+  - [x] 2.3 Implement `purchaseUpgrade()`, `getNextUpgradeCost()`, and `getPurrsPerSecond()`
     - Implement `purchaseUpgrade(upgradeId)`: re-validate affordability, deduct cost, increment `owned`, apply effect, emit `stateChange`; return `{ success: false, reason: 'insufficient_purrs' }` on failure
     - Implement `getNextUpgradeCost(upgradeId)`: `Math.floor(baseCost * Math.pow(1.15, owned))`
     - Implement `getPurrsPerSecond()`: sum of `purrsPerSecond × owned` for all passive generator upgrades
     - Recalculate and cache `clickValue` and `purrsPerSecond` on each purchase
     - _Requirements: 3.3, 3.4, 3.8, 2.1_
 
-  - [~] 2.4 Write property tests for purchase and cost formula — Properties 8, 9, 11
+  - [-] 2.4 Write property tests for purchase and cost formula — Properties 8, 9, 11
     - **Property 8: Successful purchase deducts exact cost and increments owned count**
     - **Property 9: Upgrade cost formula is always floor(baseCost × 1.15^owned)**
     - **Property 11: Purchase is rejected when Purrs are insufficient at click time**
     - **Validates: Requirements 3.3, 3.4, 3.8**
     - File: `src/__tests__/property/GameEngine.property.test.ts`
 
-  - [~] 2.5 Implement passive generation tick, `applyOfflinePurrs()`, and milestone guard
+  - [-] 2.5 Implement passive generation tick, `applyOfflinePurrs()`, and milestone guard
     - Implement `startPassiveTick()`: `setInterval` at 1000ms, add `purrsPerSecond` to `currentPurrs` and `purrs`, emit `stateChange`
     - Implement `applyOfflinePurrs()`: compute `elapsed = now - lastActiveTime`, cap at 28800s, award `purrsPerSecond × elapsed`, add `offline_purrs` notification
     - Implement milestone check inside `click()` and `applyOfflinePurrs()`: guard with `milestones[id] === false` before triggering
