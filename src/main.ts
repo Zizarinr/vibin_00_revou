@@ -1,60 +1,87 @@
-import './style.css'
-import typescriptLogo from './assets/typescript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.ts'
+import './styles.css';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${typescriptLogo}" class="framework" alt="TypeScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.ts</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+import { GameEngine } from './GameEngine.ts';
+import { PersistenceManager } from './PersistenceManager.ts';
+import { AudioManager } from './AudioManager.ts';
+import { ClickerWidget } from './widgets/ClickerWidget.ts';
+import { ShopWidget } from './widgets/ShopWidget.ts';
+import { AmbientPlayerWidget } from './widgets/AmbientPlayerWidget.ts';
+import { MilestoneWidget } from './widgets/MilestoneWidget.ts';
+import { VisualWidget } from './widgets/VisualWidget.ts';
+import type { SaveState } from './constants.ts';
 
-<div class="ticks"></div>
+// ─── Bootstrap ────────────────────────────────────────────────────────────────
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://www.typescriptlang.org" target="_blank">
-          <img class="button-icon" src="${typescriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+// 1. Persistence — load any existing save
+const persistence = new PersistenceManager();
+const savedState: SaveState | null = persistence.load();
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+// 2. Game engine — restore from save or start fresh
+const engine = new GameEngine(savedState);
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+// 3. Audio
+const audio = new AudioManager();
+if (!audio.isSupported()) {
+  // Mark sound as disabled in game state
+  engine.getState(); // ensure state is initialised
+}
+engine.setAudioManager(audio);
+engine.setPersistenceManager(persistence);
+
+// 4. Wire persistence → engine state getter
+persistence.setStateGetter(() => ({
+  version: 1,
+  savedAt: Date.now(),
+  state: { ...engine.getState() },
+}));
+
+// 5. Notify user if storage is unavailable
+persistence.setStorageErrorCallback(() => {
+  const banner = document.getElementById('save-error-banner');
+  if (banner) banner.style.display = 'block';
+});
+
+// 6. Apply offline purrs (must happen before widgets render)
+engine.applyOfflinePurrs();
+
+// 7. Mount widgets into their containers
+const clickerContainer = document.getElementById('clicker-widget')!;
+const shopContainer = document.getElementById('shop-widget')!;
+const ambientContainer = document.getElementById('ambient-widget')!;
+const milestoneContainer = document.getElementById('milestone-widget')!;
+
+new ClickerWidget(clickerContainer, engine, audio);
+new ShopWidget(shopContainer, engine);
+new AmbientPlayerWidget(ambientContainer, engine, audio);
+new MilestoneWidget(milestoneContainer, engine, audio);
+new VisualWidget(engine);
+
+// 8. Start passive tick and auto-save
+engine.startPassiveTick();
+persistence.scheduleAutoSave(30_000);
+
+// 9. Reset button
+const resetBtn = document.getElementById('reset-btn');
+if (resetBtn) {
+  resetBtn.addEventListener('click', () => {
+    const modal = document.getElementById('reset-modal');
+    if (modal) modal.style.display = 'flex';
+  });
+}
+
+const confirmResetBtn = document.getElementById('confirm-reset-btn');
+if (confirmResetBtn) {
+  confirmResetBtn.addEventListener('click', () => {
+    engine.resetProgress();
+    const modal = document.getElementById('reset-modal');
+    if (modal) modal.style.display = 'none';
+  });
+}
+
+const cancelResetBtn = document.getElementById('cancel-reset-btn');
+if (cancelResetBtn) {
+  cancelResetBtn.addEventListener('click', () => {
+    const modal = document.getElementById('reset-modal');
+    if (modal) modal.style.display = 'none';
+  });
+}

@@ -4,10 +4,47 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cat Clicker Boredom Cure</title>
+    <title>Cat Clicker — Boredom Cure 🐱</title>
   </head>
   <body>
-    <div id="app"></div>
+    <!-- Save error banner (shown when localStorage is unavailable) -->
+    <div id="save-error-banner" role="alert" style="display:none">
+      ⚠️ Progress cannot be saved — localStorage is unavailable.
+    </div>
+
+    <div id="app">
+      <header class="app-header">
+        <h1 class="app-title">🐾 Cat Clicker</h1>
+        <button id="reset-btn" class="reset-btn" aria-label="Reset progress">Reset</button>
+      </header>
+
+      <main class="app-main">
+        <!-- Left column: clicker + milestone -->
+        <section class="col-left" aria-label="Cat clicker">
+          <div id="clicker-widget"></div>
+          <div id="milestone-widget"></div>
+        </section>
+
+        <!-- Right column: shop + ambient player -->
+        <section class="col-right" aria-label="Shop and ambient player">
+          <div id="shop-widget"></div>
+          <div id="ambient-widget"></div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Reset confirmation modal -->
+    <div id="reset-modal" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title" style="display:none">
+      <div class="modal-box">
+        <h2 id="reset-modal-title">Reset Progress?</h2>
+        <p>This will delete all your Purrs, upgrades, and unlocks. This cannot be undone.</p>
+        <div class="modal-actions">
+          <button id="confirm-reset-btn" class="btn-danger">Yes, reset</button>
+          <button id="cancel-reset-btn" class="btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

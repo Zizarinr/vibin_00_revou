@@ -1,0 +1,544 @@
+/* ─── CSS Custom Properties ─────────────────────────────────────────────────── */
+:root {
+  --clr-bg:        #fdf6f0;
+  --clr-bg-warm:   #fff3e0;
+  --clr-surface:   #fff8f4;
+  --clr-border:    #e8d5c4;
+  --clr-text:      #5a4a42;
+  --clr-text-soft: #9e8a80;
+  --clr-accent:    #e07b54;
+  --clr-accent-2:  #c9a96e;
+  --clr-disabled:  #c8b8b0;
+  --clr-danger:    #d9534f;
+  --radius:        12px;
+  --shadow:        0 2px 12px rgba(90,74,66,0.10);
+  --transition:    0.5s ease;
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, 'Segoe UI', sans-serif;
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  min-height: 100svh;
+  transition: background var(--transition);
+}
+
+/* Mood: happy background */
+body.mood--happy {
+  background: var(--clr-bg-warm);
+}
+
+/* ─── Save Error Banner ───────────────────────────────────────────────────────── */
+#save-error-banner {
+  background: #fff3cd;
+  color: #856404;
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid #ffc107;
+}
+
+/* ─── App Layout ─────────────────────────────────────────────────────────────── */
+#app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0 20px;
+  border-bottom: 2px solid var(--clr-border);
+  margin-bottom: 24px;
+}
+
+.app-title {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  color: var(--clr-accent);
+  letter-spacing: -0.5px;
+}
+
+.app-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 700px) {
+  .app-main { grid-template-columns: 1fr; }
+}
+
+.col-left, .col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ─── Clicker Widget ─────────────────────────────────────────────────────────── */
+#clicker-widget {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.cat-sprite {
+  width: 140px;
+  height: 140px;
+  min-width: 100px;
+  min-height: 100px;
+  font-size: 80px;
+  line-height: 1;
+  background: none;
+  border: 3px solid var(--clr-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.cat-sprite:hover {
+  box-shadow: 0 0 0 4px var(--clr-accent-2);
+}
+
+.cat-sprite:focus-visible {
+  outline: 3px solid var(--clr-accent);
+  outline-offset: 4px;
+}
+
+/* Bounce animation */
+@keyframes cat-bounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.88); }
+  70%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+.cat-sprite.cat--bounce {
+  animation: cat-bounce 0.22s ease;
+}
+
+/* Idle animations */
+@keyframes cat-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95%            { transform: scaleY(0.1); }
+}
+.cat-sprite.cat--blink {
+  animation: cat-blink 0.4s ease;
+}
+
+@keyframes cat-tail-sway {
+  0%, 100% { transform: rotate(0deg); }
+  25%       { transform: rotate(6deg); }
+  75%       { transform: rotate(-6deg); }
+}
+.cat-sprite.cat--tail-sway {
+  animation: cat-tail-sway 0.8s ease infinite;
+}
+
+.purr-counter {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--clr-accent);
+}
+
+.muted-indicator {
+  font-size: 1.1rem;
+  color: var(--clr-text-soft);
+}
+
+/* Floating purrs text */
+.floating-purrs {
+  position: fixed;
+  pointer-events: none;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--clr-accent);
+  z-index: 9999;
+  animation: float-up 0.8s ease forwards;
+}
+
+@keyframes float-up {
+  0%   { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-40px); }
+}
+
+/* ─── Milestone Widget ───────────────────────────────────────────────────────── */
+#milestone-widget {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  box-shadow: var(--shadow);
+}
+
+.milestone-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.milestone-label {
+  font-size: 0.9rem;
+  color: var(--clr-text-soft);
+}
+
+.milestone-bar {
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  accent-color: var(--clr-accent);
+}
+
+/* Milestone overlay */
+.milestone-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(224, 123, 84, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(2rem, 8vw, 4rem);
+  color: #fff;
+  z-index: 10000;
+  animation: overlay-pop 0.3s ease;
+}
+
+@keyframes overlay-pop {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─── Shop Widget ────────────────────────────────────────────────────────────── */
+#shop-widget {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.shop-purrs-per-sec {
+  font-size: 0.85rem;
+  color: var(--clr-text-soft);
+  margin-bottom: 10px;
+  text-align: right;
+}
+
+.shop-insufficient-msg {
+  background: #fde8e8;
+  color: var(--clr-danger);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.upgrade-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.upgrade-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 2px 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--clr-border);
+  border-radius: 8px;
+  cursor: pointer;
+  background: var(--clr-bg);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.upgrade-row:hover:not(.upgrade-row--disabled) {
+  background: var(--clr-bg-warm);
+  box-shadow: 0 1px 6px rgba(90,74,66,0.12);
+}
+
+.upgrade-row:focus-visible {
+  outline: 2px solid var(--clr-accent);
+  outline-offset: 2px;
+}
+
+.upgrade-row--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upgrade-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.upgrade-desc {
+  font-size: 0.8rem;
+  color: var(--clr-text-soft);
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.upgrade-cost {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--clr-accent);
+  grid-column: 2;
+  grid-row: 1;
+  white-space: nowrap;
+}
+
+.upgrade-owned {
+  font-size: 0.75rem;
+  color: var(--clr-text-soft);
+  grid-column: 2;
+  grid-row: 2;
+  text-align: right;
+}
+
+/* ─── Ambient Player Widget ──────────────────────────────────────────────────── */
+#ambient-widget {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.track-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.track-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--clr-border);
+  border-radius: 8px;
+  background: var(--clr-bg);
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+
+.track-btn:hover {
+  background: var(--clr-bg-warm);
+}
+
+.track-btn--selected {
+  border-color: var(--clr-accent);
+  background: rgba(224,123,84,0.08);
+  font-weight: 600;
+}
+
+.track-btn:focus-visible {
+  outline: 2px solid var(--clr-accent);
+  outline-offset: 2px;
+}
+
+.track-locked {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px dashed var(--clr-border);
+  border-radius: 8px;
+  opacity: 0.6;
+  font-size: 0.85rem;
+}
+
+.track-cost {
+  font-size: 0.78rem;
+  color: var(--clr-text-soft);
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+#play-btn, #stop-btn {
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--clr-border);
+  cursor: pointer;
+  font-size: 0.9rem;
+  background: var(--clr-bg);
+  transition: background 0.15s;
+}
+
+#play-btn:hover, #stop-btn:hover {
+  background: var(--clr-bg-warm);
+}
+
+#play-btn:focus-visible, #stop-btn:focus-visible {
+  outline: 2px solid var(--clr-accent);
+  outline-offset: 2px;
+}
+
+#volume-slider {
+  flex: 1;
+  min-width: 80px;
+  accent-color: var(--clr-accent);
+}
+
+.waveform-indicator {
+  font-size: 1rem;
+  color: var(--clr-accent);
+  animation: waveform-pulse 1s ease-in-out infinite;
+}
+
+@keyframes waveform-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+.autoplay-banner {
+  margin-top: 10px;
+  background: #fff3cd;
+  color: #856404;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+/* ─── Decorative Cat Walk ────────────────────────────────────────────────────── */
+.cat-walk {
+  position: fixed;
+  bottom: 16px;
+  left: -60px;
+  font-size: 2rem;
+  z-index: 100;
+  pointer-events: none;
+  animation: cat-walk-across 5s linear forwards;
+}
+
+@keyframes cat-walk-across {
+  from { left: -60px; }
+  to   { left: calc(100vw + 60px); }
+}
+
+/* ─── Reset Button ───────────────────────────────────────────────────────────── */
+.reset-btn {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--clr-border);
+  background: var(--clr-bg);
+  color: var(--clr-text-soft);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s;
+}
+
+.reset-btn:hover {
+  background: #fde8e8;
+  color: var(--clr-danger);
+  border-color: var(--clr-danger);
+}
+
+.reset-btn:focus-visible {
+  outline: 2px solid var(--clr-accent);
+  outline-offset: 2px;
+}
+
+/* ─── Reset Modal ────────────────────────────────────────────────────────────── */
+#reset-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000;
+}
+
+.modal-box {
+  background: var(--clr-surface);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  max-width: 380px;
+  width: 90%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-box h2 {
+  font-size: 1.2rem;
+  color: var(--clr-text);
+}
+
+.modal-box p {
+  font-size: 0.9rem;
+  color: var(--clr-text-soft);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.btn-danger {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--clr-danger);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-danger:focus-visible {
+  outline: 2px solid var(--clr-danger);
+  outline-offset: 2px;
+}
+
+.btn-secondary {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--clr-border);
+  background: var(--clr-bg);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--clr-accent);
+  outline-offset: 2px;
+}
