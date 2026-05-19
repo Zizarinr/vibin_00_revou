@@ -80,9 +80,9 @@ export class MilestoneWidget {
 
   // ─── Milestone Celebration ────────────────────────────────────────────────
 
-  private onMilestone(_milestone: Milestone): void {
+  private onMilestone(milestone: Milestone): void {
     // Play milestone SFX
-    this.audioManager.playSfx('milestone');
+    this.audioManager.playSfx(milestone.soundId as any);
 
     // Disable pointer events on cat sprite
     const catSprite = document.getElementById('cat-sprite');

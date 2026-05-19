@@ -8,6 +8,7 @@ import { ShopWidget } from './widgets/ShopWidget.ts';
 import { AmbientPlayerWidget } from './widgets/AmbientPlayerWidget.ts';
 import { MilestoneWidget } from './widgets/MilestoneWidget.ts';
 import { VisualWidget } from './widgets/VisualWidget.ts';
+import { SkinWidget } from './widgets/SkinWidget.ts';
 import type { SaveState } from './constants.ts';
 
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
@@ -49,12 +50,14 @@ const clickerContainer = document.getElementById('clicker-widget')!;
 const shopContainer = document.getElementById('shop-widget')!;
 const ambientContainer = document.getElementById('ambient-widget')!;
 const milestoneContainer = document.getElementById('milestone-widget')!;
+const skinContainer = document.getElementById('skin-widget')!;
 
 new ClickerWidget(clickerContainer, engine, audio);
 new ShopWidget(shopContainer, engine);
 new AmbientPlayerWidget(ambientContainer, engine, audio);
 new MilestoneWidget(milestoneContainer, engine, audio);
 new VisualWidget(engine);
+new SkinWidget(skinContainer, engine);
 
 // 8. Start passive tick and auto-save
 engine.startPassiveTick();

@@ -4,7 +4,16 @@
 // Designed to degrade gracefully in environments where AudioContext is absent
 // (e.g., jsdom test environment, older browsers).
 
-type SfxName = 'meow' | 'purr' | 'milestone';
+type SfxName = 
+  | 'meow' 
+  | 'purr' 
+  | 'milestone'
+  | 'sfx_milestone_1'
+  | 'sfx_milestone_2'
+  | 'sfx_milestone_3'
+  | 'sfx_milestone_4'
+  | 'sfx_milestone_5'
+  | 'sfx_milestone_6';
 
 interface SfxConfig {
   type: OscillatorType;
@@ -16,6 +25,12 @@ const SFX_CONFIG: Record<SfxName, SfxConfig> = {
   meow:      { type: 'sine',     frequency: 800,  duration: 0.2 },
   purr:      { type: 'sawtooth', frequency: 150,  duration: 0.4 },
   milestone: { type: 'sine',     frequency: 1200, duration: 0.3 },
+  sfx_milestone_1: { type: 'sine',     frequency: 1000, duration: 0.3 },
+  sfx_milestone_2: { type: 'sine',     frequency: 1200, duration: 0.4 },
+  sfx_milestone_3: { type: 'sine',     frequency: 1400, duration: 0.5 },
+  sfx_milestone_4: { type: 'triangle', frequency: 1600, duration: 0.6 },
+  sfx_milestone_5: { type: 'triangle', frequency: 1800, duration: 0.7 },
+  sfx_milestone_6: { type: 'square',   frequency: 2000, duration: 0.8 },
 };
 
 interface AmbienceConfig {

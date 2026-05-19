@@ -154,3 +154,15 @@ export const AMBIENCE_TRACKS: AmbienceTrack[] = [
 ];
 
 export const DEFAULT_UNLOCKED_AMBIENCE = ['track_rainy_window', 'track_sunny_nap', 'track_cozy_fireplace'];
+
+// ─── Skins ────────────────────────────────────────────────────────────────────
+
+export const SKIN_EMOJIS: Record<string, string> = {
+  'default': '🐱',
+  'skin_sleepy': '😴',
+  'skin_playful': '🧶',
+  'skin_regal': '👑',
+  'skin_cosmic': '👽',
+  'skin_legendary': '🦁',
+  'skin_mythic': '🦄',
+};

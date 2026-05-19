@@ -241,6 +241,14 @@ export class GameEngine {
     this.emit();
   }
 
+  /** Set active skin */
+  setActiveSkin(skinId: string): void {
+    if (this.state.unlockedSkins.includes(skinId) || skinId === 'default') {
+      this.state.activeSkin = skinId;
+      this.emit();
+    }
+  }
+
   /** Reset all progress to defaults */
   resetProgress(): void {
     this.persistenceManager?.clear();

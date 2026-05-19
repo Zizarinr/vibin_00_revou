@@ -1,6 +1,7 @@
 import { GameEngine } from '../GameEngine.ts';
 import { AudioManager } from '../AudioManager.ts';
 import type { GameState } from '../constants.ts';
+import { SKIN_EMOJIS } from '../constants.ts';
 
 // ─── ClickerWidget ────────────────────────────────────────────────────────────
 //
@@ -38,6 +39,7 @@ export class ClickerWidget {
     const initialState = this.engine.getState();
     this.updateCounter(initialState.purrs);
     this.syncMutedIndicator(initialState.settings.soundEnabled);
+    this.catButton.textContent = SKIN_EMOJIS[initialState.activeSkin] || '🐱';
   }
 
   // ─── Render ────────────────────────────────────────────────────────────────
@@ -153,6 +155,7 @@ export class ClickerWidget {
   private onStateChange(state: Readonly<GameState>): void {
     this.updateCounter(state.purrs);
     this.syncMutedIndicator(state.settings.soundEnabled);
+    this.catButton.textContent = SKIN_EMOJIS[state.activeSkin] || '🐱';
   }
 
   // ─── Cleanup ──────────────────────────────────────────────────────────────
