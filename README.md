@@ -55,3 +55,5 @@ To run tests with a coverage report:
 ```bash
 npm run test:coverage
 ```
+## Some Notes
+This was my first ever vibe coding project, and manybe some update will come soon...
